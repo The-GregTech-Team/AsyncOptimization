@@ -1,0 +1,11 @@
+{
+  "modid": "asyncoptimization",
+  "name": "Async Optimization",
+  "description": "Load your worlds asynchronously",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "authorList": ["NekoCaffeine", "Lasm_Gratel"],
+  "credits": "NekoCaffeine",
+  "screenshots": [],
+  "dependencies": []
+}

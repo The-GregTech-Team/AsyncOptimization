@@ -1,0 +1,12 @@
+{
+  "package": "cn.ac.origind.asyncoptimization.mixin",
+  "refmap": "mixins.asyncoptimization.refmap.json",
+  "mixins": [
+    "MixinMinecraftServer",
+	"MixinNetworkManager",
+	"MixinServerConfigurationManager",
+	"MixinWorldServer",
+	"MixinNetworkSystem"
+  ],
+  "compatibilityLevel": "JAVA_8"
+}
