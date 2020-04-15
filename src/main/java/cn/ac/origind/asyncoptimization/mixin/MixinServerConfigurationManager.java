@@ -59,9 +59,92 @@ public abstract class MixinServerConfigurationManager {
     @Shadow
     public int viewDistance;
 
-    @Overwrite
-    public void initializeConnectionToPlayer(NetworkManager netManager, EntityPlayerMP player) {
-        NetHandlerPlayServer nethandlerplayserver = player.playerNetServerHandler;
+//    @Inject(method = "initializeConnectionToPlayer*", at = @At("HEAD"), cancellable = true)
+//    public void onInitializeConnectionToPlayer(CallbackInfo ci, NetworkManager netManager, EntityPlayerMP player, NetHandlerPlayServer nethandlerplayserver) {
+//        GameProfile profile = player.getGameProfile();
+//        PlayerProfileCache cache = mcServer.getPlayerProfileCache();
+//        GameProfile profileWithCache = cache.func_152652_a(profile.getId());
+//        String name = profileWithCache == null ? profile.getName() : profileWithCache.getName();
+//        cache.func_152649_a(profile);
+//        NBTTagCompound nbt = readPlayerDataFromFile(player);
+//        player.setWorld(mcServer.worldServerForDimension(player.dimension));
+//        WorldServer playerWorld = mcServer.worldServerForDimension(player.dimension);
+//        if (playerWorld == null) {
+//            player.dimension = 0;
+//            playerWorld = mcServer.worldServerForDimension(0);
+//            ChunkCoordinates spawnPoint = playerWorld.provider.getRandomizedSpawnPoint();
+//            player.setPosition(spawnPoint.posX, spawnPoint.posY, spawnPoint.posZ);
+//        }
+//        WorldServer world = playerWorld;
+//        ((IAsyncThreadListener) world).syncCall(() -> {
+//            player.setWorld(world);
+//            player.theItemInWorldManager.setWorld((WorldServer) player.worldObj);
+//            String address = "local";
+//            if (netManager.getRemoteAddress() != null)
+//                address = netManager.getRemoteAddress().toString();
+//            LOGGER.info("{}[{}] logged in with entity id {} at ({}, {}, {}, {})", player.getDisplayName(), address,
+//                    player.getEntityId(), player.dimension, player.posX, player.posY, player.posZ);
+//            WorldInfo info = world.getWorldInfo();
+//            ChunkCoordinates chunkcoordinates = player.worldObj.getSpawnPoint();
+//            WorldServer worldserver = (WorldServer) player.worldObj;
+//            func_72381_a(player, null, world);
+//            player.playerNetServerHandler = nethandlerplayserver;
+//            nethandlerplayserver.sendPacket(new S01PacketJoinGame(player.getEntityId(), player.theItemInWorldManager.getGameType(), info.isHardcoreModeEnabled(), worldserver.provider.dimensionId, worldserver.difficultySetting, this.getMaxPlayers(), worldserver.getWorldInfo().getTerrainType()));
+//            nethandlerplayserver.sendPacket(new S3FPacketCustomPayload("MC|Brand", mcServer.getServerModName().getBytes(Charsets.UTF_8)));
+//            nethandlerplayserver.sendPacket(new S05PacketSpawnPosition(chunkcoordinates.posX, chunkcoordinates.posY, chunkcoordinates.posZ));
+//            nethandlerplayserver.sendPacket(new S39PacketPlayerAbilities(player.capabilities));
+//            nethandlerplayserver.sendPacket(new S09PacketHeldItemChange(player.inventory.currentItem));
+//            player.getStatFile().func_150877_d();
+//            player.getStatFile().func_150884_b(player);
+//            this.func_96456_a((ServerScoreboard)worldserver.getScoreboard(), player);
+//            this.mcServer.refreshStatusNextTick();
+//            ChatComponentTranslation chatcomponenttranslation;
+//
+//            String s = profileWithCache == null ? profile.getName() : profileWithCache.getName();
+//            if (!player.getCommandSenderName().equalsIgnoreCase(s))
+//                chatcomponenttranslation = new ChatComponentTranslation("multiplayer.player.joined.renamed", player.getFormattedCommandSenderName(), s);
+//            else
+//                chatcomponenttranslation = new ChatComponentTranslation("multiplayer.player.joined", player.getFormattedCommandSenderName());
+//
+//            chatcomponenttranslation.getChatStyle().setColor(EnumChatFormatting.YELLOW);
+//            this.sendChatMsg(chatcomponenttranslation);
+//            this.playerLoggedIn(player);
+//            nethandlerplayserver.setPlayerLocation(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
+//            this.updateTimeAndWeatherForPlayer(player, worldserver);
+//
+//            if (this.mcServer.getTexturePack().length() > 0)
+//            {
+//                player.requestTexturePackLoad(this.mcServer.getTexturePack());
+//            }
+//
+//            for (Object o : player.getActivePotionEffects()) {
+//                PotionEffect potioneffect = (PotionEffect) o;
+//                nethandlerplayserver.sendPacket(new S1DPacketEntityEffect(player.getEntityId(), potioneffect));
+//            }
+//
+//            player.addSelfToInternalCraftingInventory();
+//
+//            FMLCommonHandler.instance().firePlayerLoggedIn(player);
+//            NBTTagCompound nbttagcompound = this.readPlayerDataFromFile(player);
+//            if (nbttagcompound != null && nbttagcompound.hasKey("Riding", 10))
+//            {
+//                Entity entity = EntityList.createEntityFromNBT(nbttagcompound.getCompoundTag("Riding"), worldserver);
+//
+//                if (entity != null)
+//                {
+//                    entity.forceSpawn = true;
+//                    worldserver.spawnEntityInWorld(entity);
+//                    player.mountEntity(entity);
+//                    entity.forceSpawn = false;
+//                }
+//            }
+//            FMLCommonHandler.instance().firePlayerLoggedIn(player);
+//        });
+//        ci.cancel();
+//    }
+
+    @Overwrite(remap = false)
+    public void initializeConnectionToPlayer(NetworkManager netManager, EntityPlayerMP player, NetHandlerPlayServer nethandlerplayserver) {
         GameProfile profile = player.getGameProfile();
         PlayerProfileCache cache = mcServer.getPlayerProfileCache();
         GameProfile profileWithCache = cache.func_152652_a(profile.getId());

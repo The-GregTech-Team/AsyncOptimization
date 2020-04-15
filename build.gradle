@@ -54,7 +54,7 @@ configurations {
 }
 
 dependencies {
-	shade 'org.spongepowered:mixin:0.5.10-SNAPSHOT'
+	shade 'org.spongepowered:mixin:0.7-SNAPSHOT'
 }
 
 jar {
@@ -68,7 +68,8 @@ jar {
             'TweakClass': 'org.spongepowered.asm.launch.MixinTweaker',
             'MixinConfigs': "mixins.${mod_id}.json",
             'FMLCorePluginContainsFMLMod': 'true',
-            "MixinCompatibilityLevel": "JAVA_8"
+            "MixinCompatibilityLevel": "JAVA_8",
+			"ForceLoadAsMod": 'true'
     )
 
 }

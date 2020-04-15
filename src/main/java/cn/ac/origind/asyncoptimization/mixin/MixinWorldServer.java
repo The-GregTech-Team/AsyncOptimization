@@ -3,6 +3,7 @@ package cn.ac.origind.asyncoptimization.mixin;
 import cn.ac.origind.asyncoptimization.concurrent.*;
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.ListenableFuture;
+import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.profiler.Profiler;
 import net.minecraft.server.management.PlayerManager;
 import net.minecraft.util.IProgressUpdate;
@@ -22,6 +23,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -34,6 +36,14 @@ public abstract class MixinWorldServer extends World implements IAsyncThreadList
 
     @Inject(method = "<init>*", at = @At("RETURN"))
     public void onInit(CallbackInfo ci) {
+        worldAccesses = Collections.synchronizedList(worldAccesses);
+        loadedEntityList = Collections.synchronizedList(loadedEntityList);
+        unloadedEntityList = Collections.synchronizedList(unloadedEntityList);
+        loadedTileEntityList = Collections.synchronizedList(loadedTileEntityList);
+        ReflectionHelper.setPrivateValue(World.class, this, Collections.synchronizedList(ReflectionHelper.getPrivateValue(World.class, this, "field_147484_a", "addedTileEntityList")), "field_147484_a", "addedTileEntityList");
+        ReflectionHelper.setPrivateValue(World.class, this, Collections.synchronizedList(ReflectionHelper.getPrivateValue(World.class, this, "field_147483_b", "tileEntitiesToBeRemoved")), "field_147483_b", "tileEntitiesToBeRemoved");
+        playerEntities = Collections.synchronizedList(playerEntities);
+        weatherEffects = Collections.synchronizedList(weatherEffects);
         startLoop();
     }
 

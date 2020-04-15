@@ -12,7 +12,6 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.NetworkSystem;
 import net.minecraft.network.play.server.S40PacketDisconnect;
 import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.ReportedException;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -69,16 +68,12 @@ public class MixinNetworkSystem {
         }
         else {
             // handleDisconnection
-            if (manager.channel() != null && !manager.channel().isOpen())
-            {
-
-                if (manager.getExitMessage() != null)
-                {
+            if (!manager.isChannelOpen()) {
+                if (manager.getExitMessage() != null) {
                     manager.getNetHandler().onDisconnect(manager.getExitMessage());
                 }
-                else if (manager.getNetHandler() != null)
-                {
-                    manager.getNetHandler().onDisconnect(new ChatComponentTranslation("multiplayer.disconnect.generic", new Object[0]));
+                else if (manager.getNetHandler() != null) {
+                    manager.getNetHandler().onDisconnect(new ChatComponentText("Disconnected"));
                 }
             }
         }

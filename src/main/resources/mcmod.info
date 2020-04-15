@@ -1,4 +1,4 @@
-{
+[{
   "modid": "asyncoptimization",
   "name": "Async Optimization",
   "description": "Load your worlds asynchronously",
@@ -8,4 +8,4 @@
   "credits": "NekoCaffeine",
   "screenshots": [],
   "dependencies": []
-}
+}]
