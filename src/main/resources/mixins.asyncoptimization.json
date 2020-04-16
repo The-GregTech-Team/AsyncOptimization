@@ -7,7 +7,10 @@
 	"MixinServerConfigurationManager",
 	"MixinWorldServer",
 	"MixinNetworkSystem",
-    "MixinFMLCommonHandler"
+    "MixinFMLCommonHandler",
+    "MixinNetworkMonitor",
+    "MixinTickHandler",
+    "MixinDimensionManager"
   ],
   "compatibilityLevel": "JAVA_8"
 }

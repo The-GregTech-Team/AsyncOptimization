@@ -25,6 +25,7 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
 
@@ -34,16 +35,30 @@ public abstract class MixinWorldServer extends World implements IAsyncThreadList
         super(p_i45369_1_, p_i45369_2_, p_i45369_3_, p_i45369_4_, p_i45369_5_);
     }
 
-    @Inject(method = "<init>*", at = @At("RETURN"))
+    @Inject(method = "<init>(Lnet/minecraft/server/MinecraftServer;Lnet/minecraft/world/storage/ISaveHandler;Ljava/lang/String;ILnet/minecraft/world/WorldSettings;Lnet/minecraft/profiler/Profiler;)V", at = @At("RETURN"))
     public void onInit(CallbackInfo ci) {
-        worldAccesses = Collections.synchronizedList(worldAccesses);
-        loadedEntityList = Collections.synchronizedList(loadedEntityList);
-        unloadedEntityList = Collections.synchronizedList(unloadedEntityList);
-        loadedTileEntityList = Collections.synchronizedList(loadedTileEntityList);
-        ReflectionHelper.setPrivateValue(World.class, this, Collections.synchronizedList(ReflectionHelper.getPrivateValue(World.class, this, "field_147484_a", "addedTileEntityList")), "field_147484_a", "addedTileEntityList");
-        ReflectionHelper.setPrivateValue(World.class, this, Collections.synchronizedList(ReflectionHelper.getPrivateValue(World.class, this, "field_147483_b", "tileEntitiesToBeRemoved")), "field_147483_b", "tileEntitiesToBeRemoved");
-        playerEntities = Collections.synchronizedList(playerEntities);
-        weatherEffects = Collections.synchronizedList(weatherEffects);
+        onInitInternal();
+    }
+
+    public void onInitInternal() {
+        if (worldAccesses != null)
+            worldAccesses = Collections.synchronizedList(worldAccesses);
+        if (loadedEntityList != null)
+            loadedEntityList = Collections.synchronizedList(loadedEntityList);
+        if (unloadedEntityList != null)
+            unloadedEntityList = Collections.synchronizedList(unloadedEntityList);
+        if (loadedTileEntityList != null)
+            loadedTileEntityList = Collections.synchronizedList(loadedTileEntityList);
+        List<?> addedTileEntityList = ReflectionHelper.getPrivateValue(World.class, this, "field_147484_a", "addedTileEntityList");
+        if (addedTileEntityList != null)
+            ReflectionHelper.setPrivateValue(World.class, this, Collections.synchronizedList(addedTileEntityList), "field_147484_a", "addedTileEntityList");
+        List<?> tileEntitiesToBeRemoved = ReflectionHelper.getPrivateValue(World.class, this, "field_147483_b", "tileEntitiesToBeRemoved");
+        if (tileEntitiesToBeRemoved != null)
+            ReflectionHelper.setPrivateValue(World.class, this, Collections.synchronizedList(tileEntitiesToBeRemoved), "field_147483_b", "tileEntitiesToBeRemoved");
+        if (playerEntities != null)
+            playerEntities = Collections.synchronizedList(playerEntities);
+        if (weatherEffects != null)
+            weatherEffects = Collections.synchronizedList(weatherEffects);
         startLoop();
     }
 

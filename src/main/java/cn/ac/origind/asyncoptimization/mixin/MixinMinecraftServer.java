@@ -56,9 +56,15 @@ public abstract class MixinMinecraftServer implements ICommandSender, Runnable, 
             if (id == 0 || getAllowNether()) {
                 WorldServer world = net.minecraftforge.common.DimensionManager.getWorld(id);
                 ((IAsyncThreadListener) world).addScheduledTask(() -> {
+                    this.theProfiler.startSection(world.getWorldInfo().getWorldName());
+                    this.theProfiler.startSection("pools");
+                    this.theProfiler.endSection();
                     if (tickCounter % 20 == 0) {
+                        this.theProfiler.startSection("timeSync");
                         this.serverConfigManager.sendPacketToAllPlayersInDimension(new S03PacketTimeUpdate(world.getTotalWorldTime(), world.getWorldTime(), world.getGameRules().getGameRuleBooleanValue("doDaylightCycle")), world.provider.dimensionId);
+                        this.theProfiler.endSection();
                     }
+                    this.theProfiler.startSection("tick");
                     FMLCommonHandler.instance().onPreWorldTick(world);
                     try {
                         world.tick();
@@ -69,7 +75,11 @@ public abstract class MixinMinecraftServer implements ICommandSender, Runnable, 
                         throw new ReportedException(report);
                     }
                     FMLCommonHandler.instance().onPostWorldTick(world);
+                    this.theProfiler.endSection();
+                    this.theProfiler.startSection("tracker");
                     world.getEntityTracker().updateTrackedEntities();
+                    this.theProfiler.endSection();
+                    this.theProfiler.endSection();
                     long[] timings = worldTickTimes.get(id);
                     if (timings != null)
                         timings[tickCounter % 100] = System.nanoTime() - nano;
